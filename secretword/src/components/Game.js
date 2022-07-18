@@ -1,70 +1,71 @@
 import { useState, useRef } from 'react'
+
+// styles
 import './Game.css'
 
 const Game = ({
   verifyLetter,
-  pickedWord,
   pickedCategory,
-  wordLetters,
+  pickedWord,
+  letters,
   guessedLetters,
   wrongLetters,
   guesses,
-  score,
-  letters
+  score
 }) => {
-  const [letra, setLetra] = useState('')
+  const [letter, setLetter] = useState('')
   const letterInputRef = useRef(null)
 
   const handleSubmit = e => {
     e.preventDefault()
 
-    verifyLetter(letra)
+    verifyLetter(letter)
 
-    setLetra('')
+    setLetter('')
 
     letterInputRef.current.focus()
   }
 
   return (
     <div className="game">
-      <p className="points"></p>
-      <span>Pontuação : {score}</span>
-      <h1>Advinhe a palavra </h1>
+      <p className="points">
+        <span>Pontuação</span>: {score}
+      </p>
+      <h1>Advinhe a palavra:</h1>
       <h3 className="tip">
-        Dica sobre a palavra : <span>{pickedCategory}</span>
+        Dica sobre a palavra: <span>{pickedCategory}</span>
       </h3>
-      <p>Voce ainda tem {guesses} tentativas(s).</p>
+      <p>Você ainda tem {guesses} tentativa(s).</p>
       <div className="wordContainer">
-        {letters.map((letters, i) =>
-          guessedLetters.includes(letters) ? (
-            <span keys={i} className="letter"></span>
+        {letters.map((letter, i) =>
+          guessedLetters.includes(letter) ? (
+            <span className="letter" key={i}>
+              {letter}
+            </span>
           ) : (
-            <span keys={i} className="blankSquare"></span>
+            <span key={i} className="blankSquare"></span>
           )
         )}
       </div>
       <div className="letterContainer">
-        <p>Tente adivinhar uma letra da palavra :</p>
-
+        <p>Tente adivnhar uma letra da palavra:</p>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            maxLength="1"
             name="letter"
+            maxLength="1"
+            onChange={e => setLetter(e.target.value)}
             required
-            onChange={e => setLetra(e.target.value)}
-            value={letra}
+            value={letter}
             ref={letterInputRef}
           />
-          <button>Jogar</button>
+          <button>Jogar!</button>
         </form>
       </div>
-
       <div className="wrongLettersContainer">
-        <p>Letras ja utilizadas :</p>
-
-        {wordLetters.map((letters, i) => (
-          <span key={i}>{letters}</span>
+        <p>Letras já utilizadas:</p>
+        {wrongLetters.map((letter, i) => (
+          <span key={i}>{letter}, </span>
         ))}
       </div>
     </div>
